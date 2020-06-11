@@ -1,0 +1,45 @@
+{
+  "name": "run-in-every",
+  "version": "0.0.0",
+  "description": "Run commands in every target projects/folders.",
+  "repository": "https://github.com/makeflow/run-in-every",
+  "author": "Chengdu Mufan Technology Co., Ltd.",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf bld && tsc --project src/program",
+    "lint-prettier": "prettier --list-different \"**/*.{ts,js,json,md}\"",
+    "lint": "eslint src/program --ext .ts",
+    "test": "yarn lint-prettier && yarn build && yarn lint"
+  },
+  "bin": "bld/program/main.js",
+  "files": [
+    "src/program/**/*.ts",
+    "bld/program",
+    "!*.tsbuildinfo"
+  ],
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "clime": "^0.5.14",
+    "glob": "^7.1.6",
+    "lodash": "^4.17.15",
+    "npm-which": "^3.0.1",
+    "shell-quote": "^1.7.2",
+    "strip-json-comments": "^3.1.0",
+    "tslang": "^0.1.22",
+    "villa": "^0.3.1"
+  },
+  "devDependencies": {
+    "@magicspace/configs": "^0.2.4",
+    "@magicspace/eslint-plugin": "^0.1.24",
+    "@types/glob": "^7.1.2",
+    "@types/lodash": "^4.14.155",
+    "@types/node": "^14.0.6",
+    "@types/npm-which": "^3.0.0",
+    "@types/shell-quote": "^1.6.2",
+    "eslint": "^7.1.0",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.3"
+  }
+}

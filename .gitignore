@@ -1,0 +1,22 @@
+# Develepment environment
+
+.idea/
+
+# Installable packages
+
+node_modules/
+
+# Building artifacts
+
+bld/
+.bld-cache/
+*.tgz
+
+# Debugging outputs
+
+debug/
+*.log
+
+# File system
+
+.DS_Store
