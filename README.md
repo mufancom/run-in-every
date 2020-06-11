@@ -20,7 +20,7 @@ run-in-every [target-name] [...options] -- command [...args]
 For example:
 
 ```
-run-in-every eslint-project -- eslint --ext .js,.ts
+run-in-every eslint-project -- eslint . --ext .js,.ts
 ```
 
 ### Common Options
@@ -33,21 +33,57 @@ run-in-every eslint-project -- eslint --ext .js,.ts
 
 ## Supported Targets
 
-### `eslint-project` (`eslint`)
+### ESLint Project
 
-### `tslint-project` (`tslint`)
+Target name `eslint-project`, alias `eslint`.
 
-### `ts-project` (`ts`)
+#### variables
+
+- `configFileName` file name of the matched config file (`Path.basename()`).
+
+### TSLint Project
+
+Target name `tslint-project`, alias `tslint`.
+
+#### variables
+
+- `configFileName` file name of the matched config file (`Path.basename()`).
+
+### TypeScript Project
+
+Target name `ts-project`, alias `ts`.
+
+#### options
 
 - `--composite-only` match only composite projects (`extends` is not handled).
 
-### `directory`
+#### variables
+
+- `configFileName` file name of the matched config file (`Path.basename()`).
+
+### Directory
+
+Target name `directory`.
+
+#### options
 
 - `--pattern <string>` glob pattern of directory name.
 
-### `directory-with-file`
+#### variables
+
+- `dirName` directory name of the matched directory (`Path.basename()`).
+
+### Directory with File
+
+Target name `directory-with-file`.
+
+#### options
 
 - `--pattern <string>` glob pattern of file to match.
+
+#### variables
+
+- `fileName` file name of the matched file (`Path.basename()`).
 
 # License
 
