@@ -1,6 +1,6 @@
 {
   "name": "run-in-every",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Run commands in every target projects/folders.",
   "repository": "https://github.com/makeflow/run-in-every",
   "author": "Chengdu Mufan Technology Co., Ltd.",
