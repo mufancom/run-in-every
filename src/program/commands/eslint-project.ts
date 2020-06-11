@@ -1,12 +1,13 @@
 import * as FS from 'fs';
 import * as Path from 'path';
 
-import {Context, command, metadata} from 'clime';
+import {Context, command, metadata, option} from 'clime';
 import glob from 'glob';
 import _ from 'lodash';
 import * as v from 'villa';
 
 import {Target} from '../@core';
+import {filterNestedPaths} from '../@utils';
 
 const ESLINT_CONFIG_FILE_NAMES = [
   '.eslintrc.js',
@@ -21,7 +22,13 @@ const ESLINT_CONFIG_FILE_GLOB_PATTERN = `**/{${ESLINT_CONFIG_FILE_NAMES.join(
   ',',
 )}}`;
 
-export class ESLintProjectOptions extends Target.CommandOptions {}
+export class ESLintProjectOptions extends Target.CommandOptions {
+  @option({
+    toggle: true,
+    description: 'include nested-projects',
+  })
+  nested!: boolean;
+}
 
 @command({
   description: 'Run in every ESLint project',
@@ -33,7 +40,9 @@ export default class extends Target.Command {
     return this.runInEvery(options, context);
   }
 
-  protected async scan(): Promise<Target.Target[]> {
+  protected async scan(
+    options: ESLintProjectOptions,
+  ): Promise<Target.Target[]> {
     let eslintConfigFilePaths = await v.call(
       glob,
       ESLINT_CONFIG_FILE_GLOB_PATTERN,
@@ -64,7 +73,20 @@ export default class extends Target.Command {
       };
     });
 
-    return _.uniqBy(configFileEntries, entry => entry.dir).map(entry => {
+    configFileEntries = _.sortBy(
+      _.uniqBy(configFileEntries, entry => entry.dir),
+      entry => entry.dir,
+    );
+
+    if (!options.nested) {
+      configFileEntries = filterNestedPaths(
+        configFileEntries,
+        entry => entry.dir,
+        true,
+      );
+    }
+
+    return configFileEntries.map(entry => {
       return new Target.Target(entry.dir, entry.dir, entry.variables);
     });
   }

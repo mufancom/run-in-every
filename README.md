@@ -37,6 +37,10 @@ run-in-every eslint-project -- eslint . --ext .js,.ts
 
 Target name `eslint-project`, alias `eslint`.
 
+#### options
+
+- `--nested` include nested-projects.
+
 #### variables
 
 - `configFileName` file name of the matched config file (`Path.basename()`).
@@ -44,6 +48,10 @@ Target name `eslint-project`, alias `eslint`.
 ### TSLint Project
 
 Target name `tslint-project`, alias `tslint`.
+
+#### options
+
+- `--nested` include nested-projects.
 
 #### variables
 
