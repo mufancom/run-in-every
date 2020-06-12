@@ -42,7 +42,7 @@ export class CommandOptions extends ClimeOptions {
   parallel!: boolean;
 
   @option({
-    default: 5,
+    default: 4,
     description: 'concurrency for parallel mode',
   })
   concurrency!: number;
