@@ -1,4 +1,3 @@
-import * as FS from 'fs';
 import * as Path from 'path';
 
 import {Context, command, metadata, option} from 'clime';
@@ -7,7 +6,7 @@ import _ from 'lodash';
 import * as v from 'villa';
 
 import {Target} from '../@core';
-import {filterNestedPaths} from '../@utils';
+import {filterNestedPaths, loadConfig} from '../@utils';
 
 const ESLINT_CONFIG_FILE_NAMES = [
   '.eslintrc.js',
@@ -58,15 +57,29 @@ export default class extends Target.Command {
     });
 
     let configFileEntries = [
-      ...eslintConfigFilePaths,
-      ...(await v.filter(packageFilePaths, async path => {
-        let json = await v.call<string>(FS.readFile, path, 'utf8');
-        return 'eslintConfig' in JSON.parse(json);
+      ...(await v.map(eslintConfigFilePaths, async path => {
+        return {
+          path,
+          config: await loadConfig<any>(path, 'json'),
+        };
       })),
-    ].map(path => {
+      ..._.compact(
+        await v.map(packageFilePaths, async path => {
+          let data = await loadConfig<any>(path);
+
+          return 'eslintConfig' in data
+            ? {
+                path,
+                config: data?.eslintConfig,
+              }
+            : undefined;
+        }),
+      ),
+    ].map(({path, config}) => {
       return {
         path,
         dir: Path.dirname(path),
+        config,
         variables: {
           configFileName: Path.basename(path),
         },
@@ -81,7 +94,12 @@ export default class extends Target.Command {
     if (!options.nested) {
       configFileEntries = filterNestedPaths(
         configFileEntries,
-        entry => entry.dir,
+        entry => {
+          return {
+            path: entry.dir,
+            forceKeep: !!entry.config?.root,
+          };
+        },
         true,
       );
     }

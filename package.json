@@ -1,7 +1,7 @@
 {
   "name": "run-in-every",
   "version": "0.1.1",
-  "description": "Run commands in every target projects/folders.",
+  "description": "Run commands in every target projects/directories.",
   "repository": "https://github.com/makeflow/run-in-every",
   "author": "Chengdu Mufan Technology Co., Ltd.",
   "license": "MIT",
@@ -26,7 +26,8 @@
     "shell-quote": "^1.7.2",
     "strip-json-comments": "^3.1.0",
     "tslang": "^0.1.22",
-    "villa": "^0.3.1"
+    "villa": "^0.3.1",
+    "yaml": "^1.10.0"
   },
   "devDependencies": {
     "@magicspace/configs": "^0.2.4",

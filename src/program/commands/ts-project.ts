@@ -1,13 +1,12 @@
-import * as FS from 'fs';
 import * as Path from 'path';
 
 import {Context, command, metadata, option} from 'clime';
 import glob from 'glob';
 import _ from 'lodash';
-import stripJSONComments from 'strip-json-comments';
 import * as v from 'villa';
 
 import {Target} from '../@core';
+import {loadConfig} from '../@utils';
 
 export class TSProjectOptions extends Target.CommandOptions {
   @option({
@@ -39,9 +38,8 @@ export default class extends Target.Command {
 
     if (options.compositeOnly) {
       configFilePaths = await v.filter(configFilePaths, async path => {
-        let jsonc = await v.call<string>(FS.readFile, path, 'utf8');
-        let config = JSON.parse(stripJSONComments(jsonc));
-        return config.compilerOptions?.composite === true;
+        let config = await loadConfig<any>(path);
+        return config?.compilerOptions?.composite === true;
       });
     }
 

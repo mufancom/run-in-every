@@ -58,7 +58,12 @@ export default class extends Target.Command {
     if (!options.nested) {
       configFileEntries = filterNestedPaths(
         configFileEntries,
-        entry => entry.dir,
+        entry => {
+          return {
+            path: entry.dir,
+            forceKeep: false,
+          };
+        },
         true,
       );
     }
