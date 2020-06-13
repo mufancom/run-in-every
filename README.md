@@ -20,7 +20,7 @@ run-in-every [target-name] [...options] -- command [...args]
 For example:
 
 ```
-run-in-every eslint-project --echo -- eslint --ignore-pattern .eslintrc.js --ext .js,.ts .
+run-in-every eslint-project --echo --parallel -- eslint --config {configFileName} .
 ```
 
 ### Common Options
