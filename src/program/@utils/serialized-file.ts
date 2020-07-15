@@ -5,19 +5,19 @@ import stripJSONComments from 'strip-json-comments';
 import * as v from 'villa';
 import * as YAML from 'yaml';
 
-export type ConfigType = 'javascript' | 'json' | 'yaml';
+export type SerializedFormat = 'javascript' | 'json' | 'yaml';
 
-export async function loadConfig<T = unknown>(
+export async function loadSerializedFile<T = unknown>(
   path: string,
-  defaultType?: ConfigType,
+  defaultType?: SerializedFormat,
 ): Promise<T>;
-export async function loadConfig(
+export async function loadSerializedFile(
   path: string,
-  defaultType?: ConfigType,
+  defaultType?: SerializedFormat,
 ): Promise<unknown> {
   let extension = Path.extname(path);
 
-  let type: ConfigType;
+  let type: SerializedFormat;
 
   switch (extension) {
     case '.js':

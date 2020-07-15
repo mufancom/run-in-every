@@ -6,6 +6,11 @@ import _ from 'lodash';
 import * as v from 'villa';
 
 import {Target} from '../@core';
+import {
+  DataPatternMatcher,
+  createDataPatternMatcher,
+  loadSerializedFile,
+} from '../@utils';
 
 export class DirectoryWithFileOptions extends Target.CommandOptions {
   @option({
@@ -13,6 +18,22 @@ export class DirectoryWithFileOptions extends Target.CommandOptions {
     required: true,
   })
   pattern!: string;
+
+  @option({
+    description: 'data pattern of file to match',
+    default: '',
+  })
+  data!: string;
+
+  get dataPatternMatcher(): DataPatternMatcher | undefined {
+    let dataPattern = this.data;
+
+    if (!dataPattern) {
+      return undefined;
+    }
+
+    return createDataPatternMatcher(dataPattern);
+  }
 }
 
 @command({
@@ -30,7 +51,19 @@ export default class extends Target.Command {
   ): Promise<Target.Target[]> {
     let filePaths = await v.call(glob, `**/${options.pattern}`, {
       ignore: ['**/node_modules/**'],
+      nodir: true,
+      dot: true,
     });
+
+    let dataPatternMatcher = options.dataPatternMatcher;
+
+    if (dataPatternMatcher) {
+      filePaths = await v.filter(filePaths, async path => {
+        let data = await loadSerializedFile<any>(path);
+
+        return dataPatternMatcher!(data);
+      });
+    }
 
     let fileEntries = filePaths.map(path => {
       return {

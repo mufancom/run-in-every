@@ -28,6 +28,7 @@ export default class extends Target.Command {
   protected async scan(options: DirectoryOptions): Promise<Target.Target[]> {
     let directoryPaths = await v.call(glob, `**/${options.pattern}/`, {
       ignore: ['**/node_modules/**'],
+      dot: true,
     });
 
     let directoryEntries = directoryPaths.map(path => {

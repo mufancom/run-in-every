@@ -6,7 +6,7 @@ import _ from 'lodash';
 import * as v from 'villa';
 
 import {Target} from '../@core';
-import {loadConfig} from '../@utils';
+import {loadSerializedFile} from '../@utils';
 
 export class TSProjectOptions extends Target.CommandOptions {
   @option({
@@ -39,6 +39,7 @@ export default class extends Target.Command {
       {
         ignore: ['**/node_modules/**'],
         nodir: true,
+        dot: true,
       },
     );
 
@@ -47,7 +48,7 @@ export default class extends Target.Command {
 
     if (!toIncludeComposite || !toIncludeNonComposite) {
       configFilePaths = await v.filter(configFilePaths, async path => {
-        let config = await loadConfig<any>(path);
+        let config = await loadSerializedFile<any>(path);
 
         let composite = config?.compilerOptions?.composite === true;
 

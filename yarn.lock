@@ -1300,6 +1300,18 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
+state-based-json-parser@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/state-based-json-parser/-/state-based-json-parser-1.0.4.tgz#4b11fdafe1890b9b65a0dc6c57fcd33f30a59e1d"
+  integrity sha512-W0ZV9TPLBDm+nRtQh1OJ5NslonKeZcwWC42hw3O4gzEoc3p19+5Dt3rWaZCy3KvZ08+LLkrjVlF8pa6J9mGWwQ==
+  dependencies:
+    state-based-string-parser "^1"
+
+state-based-string-parser@^1:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/state-based-string-parser/-/state-based-string-parser-1.0.4.tgz#dd3e18f45d054ecbfaafb7adbf8bac147cd57e31"
+  integrity sha512-PjICX8t5bE2b2JRktXcREukNdwlvrEa7joXPV316Qba7+emBW7LLT5d1MPCrX0h8pMtBBSc9W1mAoxR0LGiHJw==
+
 string-width@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-3.1.0.tgz#22767be21b62af1081574306f69ac51b62203961"

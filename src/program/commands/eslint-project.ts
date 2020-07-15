@@ -6,7 +6,7 @@ import _ from 'lodash';
 import * as v from 'villa';
 
 import {Target} from '../@core';
-import {filterNestedPaths, loadConfig} from '../@utils';
+import {filterNestedPaths, loadSerializedFile} from '../@utils';
 
 const ESLINT_CONFIG_FILE_NAMES = [
   '.eslintrc.js',
@@ -48,24 +48,26 @@ export default class extends Target.Command {
       {
         ignore: ['**/node_modules/**'],
         nodir: true,
+        dot: true,
       },
     );
 
     let packageFilePaths = await v.call(glob, '**/package.json', {
       ignore: ['**/node_modules/**'],
       nodir: true,
+      dot: true,
     });
 
     let configFileEntries = [
       ...(await v.map(eslintConfigFilePaths, async path => {
         return {
           path,
-          config: await loadConfig<any>(path, 'json'),
+          config: await loadSerializedFile<any>(path, 'json'),
         };
       })),
       ..._.compact(
         await v.map(packageFilePaths, async path => {
-          let data = await loadConfig<any>(path);
+          let data = await loadSerializedFile<any>(path);
 
           return 'eslintConfig' in data
             ? {

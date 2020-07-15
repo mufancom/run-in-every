@@ -38,6 +38,7 @@ export default class extends Target.Command {
     let configFilePaths = await v.call(glob, TSLINT_CONFIG_FILE_GLOB_PATTERN, {
       ignore: ['**/node_modules/**'],
       nodir: true,
+      dot: true,
     });
 
     let configFileEntries = configFilePaths.map(path => {

@@ -89,6 +89,12 @@ Target name `directory-with-file`.
 #### options
 
 - `--pattern <string>` glob pattern of file to match.
+- `--data <string>` data pattern of file to match, format: `<key>[:<value>][,...]`, e.g.: `'name: "run-in-every", version: "0.1.0"'`.
+  - `<key>`:
+    1. Plain string will be split as path keys, e.g. `scripts.build`.
+    2. JSON string array will be directly treated as path keys, e.g. `["scripts", "build"]`.
+  - `<value>`: JSON value to be compared with `_.isEqual`.
+  - If `<value>` is absent, it tests whether the path exists.
 
 #### variables
 
