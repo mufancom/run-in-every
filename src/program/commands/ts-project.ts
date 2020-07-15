@@ -10,6 +10,13 @@ import {loadSerializedFile} from '../@utils';
 
 export class TSProjectOptions extends Target.CommandOptions {
   @option({
+    description: 'include variant `tsconfig.<pattern>.json`',
+    placeholder: 'pattern',
+    default: '',
+  })
+  includeVariant!: string;
+
+  @option({
     toggle: true,
     description: 'include composite projects (`extends` is not handled)',
   })
@@ -33,9 +40,19 @@ export default class extends Target.Command {
   }
 
   protected async scan(options: TSProjectOptions): Promise<Target.Target[]> {
+    let configFilePatterns: string[] = ['tsconfig.json'];
+
+    if (options.includeVariant) {
+      configFilePatterns.push(`tsconfig.${options.includeVariant}.json`);
+    }
+
     let configFilePaths = await v.call(
       glob,
-      '**/{tsconfig.json,tsconfig.*.json}',
+      `**/${
+        configFilePatterns.length > 1
+          ? `{${configFilePatterns.join(',')}}`
+          : configFilePatterns.join(',')
+      }`,
       {
         ignore: ['**/node_modules/**'],
         nodir: true,
