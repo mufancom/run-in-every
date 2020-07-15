@@ -7,19 +7,19 @@ A simple command line utility for running commands in specific projects or direc
 
 ## Installation
 
-```
+```bash
 yarn add --dev run-in-every
 ```
 
 ## Usage
 
-```
+```bash
 run-in-every [target-name] [...options] -- command [...args]
 ```
 
 For example:
 
-```
+```bash
 run-in-every eslint-project --echo --parallel -- eslint --config {configFileName} .
 ```
 
@@ -61,8 +61,13 @@ Target name `tslint-project`, alias `tslint`.
 
 Target name `ts-project`, alias `ts`.
 
+```bash
+run-in-every ts-project -- tsc
+```
+
 #### options
 
+- `--include-variant <pattern>` include variant `tsconfig.<pattern>.json`.
 - `--include-composite` include composite projects (`extends` is not handled).
 - `--only-composite` match only composite projects (`extends` is not handled).
 
@@ -85,6 +90,13 @@ Target name `directory`.
 ### Directory with File
 
 Target name `directory-with-file`.
+
+E.g.:
+
+```bash
+run-in-every directory-with-file --pattern package.json --data script.build -- pwd
+run-in-every directory-with-file --pattern config.json --data 'host: "localhost"' -- pwd
+```
 
 #### options
 
