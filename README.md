@@ -63,7 +63,8 @@ Target name `ts-project`, alias `ts`.
 
 #### options
 
-- `--composite-only` match only composite projects (`extends` is not handled).
+- `--include-composite` include composite projects (`extends` is not handled).
+- `--only-composite` match only composite projects (`extends` is not handled).
 
 #### variables
 

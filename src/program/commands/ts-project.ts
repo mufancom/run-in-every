@@ -11,9 +11,15 @@ import {loadConfig} from '../@utils';
 export class TSProjectOptions extends Target.CommandOptions {
   @option({
     toggle: true,
+    description: 'include composite projects (`extends` is not handled)',
+  })
+  includeComposite!: boolean;
+
+  @option({
+    toggle: true,
     description: 'match only composite projects (`extends` is not handled)',
   })
-  compositeOnly!: boolean;
+  onlyComposite!: boolean;
 }
 
 @command({
@@ -36,10 +42,16 @@ export default class extends Target.Command {
       },
     );
 
-    if (options.compositeOnly) {
+    let toIncludeComposite = options.includeComposite || options.onlyComposite;
+    let toIncludeNonComposite = !options.onlyComposite;
+
+    if (!toIncludeComposite || !toIncludeNonComposite) {
       configFilePaths = await v.filter(configFilePaths, async path => {
         let config = await loadConfig<any>(path);
-        return config?.compilerOptions?.composite === true;
+
+        let composite = config?.compilerOptions?.composite === true;
+
+        return composite ? toIncludeComposite : toIncludeNonComposite;
       });
     }
 
