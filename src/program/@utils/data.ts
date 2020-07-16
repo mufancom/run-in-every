@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {Minimatch} from 'minimatch';
 import JSONParser from 'state-based-json-parser';
 
 const jsonParser = new JSONParser();
@@ -7,6 +8,8 @@ export type DataPatternMatcher = (data: unknown) => boolean;
 
 export function createDataPatternMatcher(pattern: string): DataPatternMatcher {
   type Filter = (data: unknown) => boolean;
+
+  pattern = pattern.trim();
 
   let filters: Filter[] = [];
 
@@ -21,7 +24,7 @@ export function createDataPatternMatcher(pattern: string): DataPatternMatcher {
       if (typeof value === 'string') {
         keys = [value];
       } else if (Array.isArray(value)) {
-        keys = value.map(key => String(key));
+        keys = value.map(key => _.toString(key));
       } else {
         throw new SyntaxError('Invalid data pattern path');
       }
@@ -36,17 +39,36 @@ export function createDataPatternMatcher(pattern: string): DataPatternMatcher {
 
     let expectedValue: unknown;
 
-    if (index < pattern.length && pattern[index] === ':') {
-      index++;
+    if (index < pattern.length) {
+      let colonRegex = /\s*:\s*/g;
 
-      let {value, index: lastIndex} = jsonParser.parse(pattern, index);
+      colonRegex.lastIndex = index;
 
-      if (value === undefined) {
-        throw new SyntaxError('Invalid data pattern value');
+      let colonGroups = colonRegex.exec(pattern);
+
+      if (colonGroups) {
+        index = colonRegex.lastIndex;
+
+        let valueBeingPattern = false;
+
+        if (pattern.slice(index).startsWith('p"')) {
+          valueBeingPattern = true;
+          index++;
+        }
+
+        let {value, index: lastIndex} = jsonParser.parse(pattern, index);
+
+        if (value === undefined) {
+          throw new SyntaxError('Invalid data pattern value');
+        }
+
+        if (valueBeingPattern && typeof value === 'string') {
+          value = new Minimatch(value);
+        }
+
+        expectedValue = value;
+        index = lastIndex;
       }
-
-      expectedValue = value;
-      index = lastIndex;
     }
 
     filters.push(createFilter(keys, expectedValue));
@@ -55,7 +77,7 @@ export function createDataPatternMatcher(pattern: string): DataPatternMatcher {
       break;
     }
 
-    let separatorRegex = /,\s*/g;
+    let separatorRegex = /\s*,\s*/g;
 
     separatorRegex.lastIndex = index;
 
@@ -82,6 +104,8 @@ export function createDataPatternMatcher(pattern: string): DataPatternMatcher {
   function createFilter(keys: string[], value: unknown): Filter {
     return value === undefined
       ? data => _.has(data, keys)
+      : value instanceof Minimatch
+      ? data => value.match(_.toString(_.get(data, keys)))
       : data => _.isEqual(_.get(data, keys), value);
   }
 }
