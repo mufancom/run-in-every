@@ -12,9 +12,16 @@ export class TSProjectOptions extends Target.CommandOptions {
   @option({
     description: 'include variant `tsconfig.<pattern>.json`',
     placeholder: 'pattern',
-    default: '',
+    type: String,
   })
-  includeVariant!: string;
+  includeVariant: string | undefined;
+
+  @option({
+    description: 'only variant `tsconfig.<pattern>.json`',
+    placeholder: 'pattern',
+    type: String,
+  })
+  onlyVariant: string | undefined;
 
   @option({
     toggle: true,
@@ -40,10 +47,16 @@ export default class extends Target.Command {
   }
 
   protected async scan(options: TSProjectOptions): Promise<Target.Target[]> {
-    let configFilePatterns: string[] = ['tsconfig.json'];
+    let configFilePatterns: string[] = [];
 
-    if (options.includeVariant) {
-      configFilePatterns.push(`tsconfig.${options.includeVariant}.json`);
+    if (!options.onlyVariant) {
+      configFilePatterns.push('tsconfig.json');
+    }
+
+    let variant = options.onlyVariant || options.includeVariant;
+
+    if (variant) {
+      configFilePatterns.push(`tsconfig.${variant}.json`);
     }
 
     let configFilePaths = await v.call(

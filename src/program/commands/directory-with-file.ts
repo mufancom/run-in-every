@@ -21,9 +21,9 @@ export class DirectoryWithFileOptions extends Target.CommandOptions {
 
   @option({
     description: 'data pattern of file to match',
-    default: '',
+    type: String,
   })
-  data!: string;
+  data: string | undefined;
 
   get dataPatternMatcher(): DataPatternMatcher | undefined {
     let dataPattern = this.data;

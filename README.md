@@ -68,6 +68,7 @@ run-in-every ts-project -- tsc
 #### options
 
 - `--include-variant <pattern>` include variant `tsconfig.<pattern>.json`.
+- `--only-variant <pattern>` only variant `tsconfig.<pattern>.json`.
 - `--include-composite` include composite projects (`extends` is not handled).
 - `--only-composite` match only composite projects (`extends` is not handled).
 
