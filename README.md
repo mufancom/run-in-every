@@ -95,8 +95,8 @@ Target name `directory-with-file`.
 E.g.:
 
 ```bash
-run-in-every directory-with-file --pattern package.json --data script.build -- pwd
-run-in-every directory-with-file --pattern config.json --data 'host: "localhost"' -- pwd
+run-in-every directory-with-file --pattern '*/**/package.json' --data script.build -- pwd
+run-in-every directory-with-file --pattern '*/**/config.json' --data 'host: "localhost"' -- pwd
 ```
 
 #### options

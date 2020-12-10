@@ -49,7 +49,7 @@ export default class extends Target.Command {
   protected async scan(
     options: DirectoryWithFileOptions,
   ): Promise<Target.Target[]> {
-    let filePaths = await v.call(glob, `**/${options.pattern}`, {
+    let filePaths = await v.call(glob, options.pattern, {
       ignore: ['**/node_modules/**'],
       nodir: true,
       dot: true,
